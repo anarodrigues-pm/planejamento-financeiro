@@ -3,6 +3,7 @@ import SummaryCards from './components/SummaryCards'
 import TransactionForm from './components/TransactionForm'
 import TransactionTable from './components/TransactionTable'
 import ExpenseChart from './components/ExpenseChart'
+import MonthlyOverview from './components/MonthlyOverview'
 import { useTransactions } from './hooks/useTransactions'
 import { Loader2 } from 'lucide-react'
 
@@ -14,8 +15,11 @@ export default function App() {
     cloudError,
     summary,
     expenseByCategory,
+    availableYears,
+    getYearData,
     addTransaction,
     deleteTransaction,
+    CLOSING_DAY,
   } = useTransactions()
 
   return (
@@ -36,6 +40,15 @@ export default function App() {
           <div className="lg:col-span-3">
             <ExpenseChart data={expenseByCategory} />
           </div>
+        </section>
+
+        {/* Annual overview */}
+        <section className="mt-10">
+          <MonthlyOverview
+            availableYears={availableYears}
+            getYearData={getYearData}
+            closingDay={CLOSING_DAY}
+          />
         </section>
 
         {/* Data loading indicator */}
