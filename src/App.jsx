@@ -13,7 +13,7 @@ export default function App() {
     loading,
     isCloud,
     cloudError,
-    summary,
+    currentCycle,
     expenseByCategory,
     availableYears,
     getYearData,
@@ -27,9 +27,9 @@ export default function App() {
       <Header isCloud={isCloud} cloudError={cloudError} />
 
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-16">
-        {/* Summary cards */}
+        {/* Summary cards — CICLO ATUAL */}
         <section className="mt-8">
-          <SummaryCards summary={summary} />
+          <SummaryCards cycle={currentCycle} />
         </section>
 
         {/* Main grid: Form + Chart */}

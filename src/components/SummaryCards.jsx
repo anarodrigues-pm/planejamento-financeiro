@@ -3,12 +3,13 @@ import {
   TrendingUp,
   TrendingDown,
   PiggyBank,
+  CalendarClock,
 } from 'lucide-react'
 
 const cards = [
   {
     key: 'balance',
-    label: 'Saldo Atual',
+    label: 'Saldo do Ciclo',
     icon: Wallet,
     color: 'text-primary-600',
     bg: 'bg-primary-50',
@@ -17,7 +18,7 @@ const cards = [
   },
   {
     key: 'totalIncome',
-    label: 'Total de Entradas',
+    label: 'Entradas',
     icon: TrendingUp,
     color: 'text-income',
     bg: 'bg-income-light',
@@ -26,7 +27,7 @@ const cards = [
   },
   {
     key: 'totalExpense',
-    label: 'Total de Saídas',
+    label: 'Saídas',
     icon: TrendingDown,
     color: 'text-expense',
     bg: 'bg-expense-light',
@@ -35,7 +36,7 @@ const cards = [
   },
   {
     key: 'totalInvest',
-    label: 'Total Investido',
+    label: 'Investido',
     icon: PiggyBank,
     color: 'text-invest',
     bg: 'bg-invest-light',
@@ -51,53 +52,67 @@ function formatCurrency(value) {
   })
 }
 
-export default function SummaryCards({ summary }) {
+export default function SummaryCards({ cycle }) {
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
-      {cards.map((card, i) => {
-        const Icon = card.icon
-        const value = summary[card.key]
+    <div>
+      {/* Cycle label */}
+      <div className="flex items-center gap-2 mb-4 animate-fade-in-up">
+        <div className="flex items-center gap-2 bg-primary-50 text-primary-600 px-3.5 py-1.5 rounded-xl border border-primary-100">
+          <CalendarClock className="w-4 h-4" />
+          <span className="text-sm font-semibold">{cycle.label}</span>
+        </div>
+        <span className="text-xs text-text-muted hidden sm:inline">
+          Fatura atual sendo acumulada
+        </span>
+      </div>
 
-        return (
-          <div
-            key={card.key}
-            className={`
-              animate-fade-in-up stagger-${i + 1}
-              bg-surface rounded-2xl border ${card.border}
-              p-5 sm:p-6
-              hover:shadow-lg hover:-translate-y-0.5
-              transition-all duration-300 ease-out
-              group cursor-default
-            `}
-          >
-            <div className="flex items-center justify-between mb-4">
-              <span className="text-sm font-medium text-text-secondary">
-                {card.label}
-              </span>
+      {/* Cards */}
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-5">
+        {cards.map((card, i) => {
+          const Icon = card.icon
+          const value = cycle[card.key]
+
+          return (
+            <div
+              key={card.key}
+              className={`
+                animate-fade-in-up stagger-${i + 1}
+                bg-surface rounded-2xl border ${card.border}
+                p-4 sm:p-6
+                hover:shadow-lg hover:-translate-y-0.5
+                transition-all duration-300 ease-out
+                group cursor-default
+              `}
+            >
+              <div className="flex items-center justify-between mb-3 sm:mb-4">
+                <span className="text-xs sm:text-sm font-medium text-text-secondary">
+                  {card.label}
+                </span>
+                <div
+                  className={`
+                    w-8 h-8 sm:w-10 sm:h-10 rounded-xl ${card.bg}
+                    flex items-center justify-center
+                    group-hover:scale-110 transition-transform duration-300
+                  `}
+                >
+                  <Icon className={`w-4 h-4 sm:w-5 sm:h-5 ${card.color}`} />
+                </div>
+              </div>
+
+              <p className={`text-xl sm:text-3xl font-bold tracking-tight ${card.color}`}>
+                {formatCurrency(value)}
+              </p>
+
               <div
                 className={`
-                  w-10 h-10 rounded-xl ${card.bg}
-                  flex items-center justify-center
-                  group-hover:scale-110 transition-transform duration-300
+                  mt-3 h-1 rounded-full bg-gradient-to-r ${card.gradient}
+                  opacity-60 group-hover:opacity-100 transition-opacity duration-300
                 `}
-              >
-                <Icon className={`w-5 h-5 ${card.color}`} />
-              </div>
+              />
             </div>
-
-            <p className={`text-2xl sm:text-3xl font-bold tracking-tight ${card.color}`}>
-              {formatCurrency(value)}
-            </p>
-
-            <div
-              className={`
-                mt-3 h-1 rounded-full bg-gradient-to-r ${card.gradient}
-                opacity-60 group-hover:opacity-100 transition-opacity duration-300
-              `}
-            />
-          </div>
-        )
-      })}
+          )
+        })}
+      </div>
     </div>
   )
 }
