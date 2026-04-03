@@ -1,6 +1,6 @@
-import { Wallet } from 'lucide-react'
+import { Wallet, Cloud, HardDrive, Wifi, WifiOff } from 'lucide-react'
 
-export default function Header() {
+export default function Header({ isCloud, cloudError }) {
   return (
     <header className="bg-surface border-b border-border sticky top-0 z-50 backdrop-blur-md bg-white/80">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -19,9 +19,28 @@ export default function Header() {
             </div>
           </div>
 
-          <div className="hidden sm:flex items-center gap-2 text-sm text-text-secondary">
-            <div className="w-2 h-2 rounded-full bg-income animate-pulse" />
-            Dados salvos localmente
+          {/* Connection status */}
+          <div className="flex items-center gap-2">
+            {isCloud ? (
+              <div className="flex items-center gap-2 text-sm bg-income-light text-income-dark px-3 py-1.5 rounded-xl border border-income/20">
+                <Cloud className="w-3.5 h-3.5" />
+                <Wifi className="w-3 h-3" />
+                <span className="text-xs font-medium hidden sm:inline">
+                  Sincronizado na nuvem
+                </span>
+              </div>
+            ) : (
+              <div
+                className="flex items-center gap-2 text-sm bg-surface-alt text-text-secondary px-3 py-1.5 rounded-xl border border-border cursor-help"
+                title={cloudError || 'Usando armazenamento local'}
+              >
+                <HardDrive className="w-3.5 h-3.5" />
+                <WifiOff className="w-3 h-3 opacity-50" />
+                <span className="text-xs font-medium hidden sm:inline">
+                  Dados salvos localmente
+                </span>
+              </div>
+            )}
           </div>
         </div>
       </div>

@@ -1,73 +1,26 @@
-import { useState, useEffect, useMemo } from 'react'
 import Header from './components/Header'
 import SummaryCards from './components/SummaryCards'
 import TransactionForm from './components/TransactionForm'
 import TransactionTable from './components/TransactionTable'
 import ExpenseChart from './components/ExpenseChart'
-
-const STORAGE_KEY = 'finplan-transactions'
-
-function loadTransactions() {
-  try {
-    const stored = localStorage.getItem(STORAGE_KEY)
-    return stored ? JSON.parse(stored) : []
-  } catch {
-    return []
-  }
-}
+import { useTransactions } from './hooks/useTransactions'
+import { Loader2 } from 'lucide-react'
 
 export default function App() {
-  const [transactions, setTransactions] = useState(loadTransactions)
-
-  useEffect(() => {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(transactions))
-  }, [transactions])
-
-  const summary = useMemo(() => {
-    const totalIncome = transactions
-      .filter(t => t.type === 'income')
-      .reduce((sum, t) => sum + t.amount, 0)
-
-    const totalExpense = transactions
-      .filter(t => t.type === 'expense')
-      .reduce((sum, t) => sum + t.amount, 0)
-
-    const totalInvest = transactions
-      .filter(t => t.type === 'invest')
-      .reduce((sum, t) => sum + t.amount, 0)
-
-    return {
-      balance: totalIncome - totalExpense - totalInvest,
-      totalIncome,
-      totalExpense,
-      totalInvest,
-    }
-  }, [transactions])
-
-  const expenseByCategory = useMemo(() => {
-    const map = {}
-    transactions
-      .filter(t => t.type === 'expense')
-      .forEach(t => {
-        map[t.category] = (map[t.category] || 0) + t.amount
-      })
-    return Object.entries(map).map(([name, value]) => ({ name, value }))
-  }, [transactions])
-
-  function addTransaction(transaction) {
-    setTransactions(prev => [
-      { ...transaction, id: crypto.randomUUID(), createdAt: Date.now() },
-      ...prev,
-    ])
-  }
-
-  function deleteTransaction(id) {
-    setTransactions(prev => prev.filter(t => t.id !== id))
-  }
+  const {
+    transactions,
+    loading,
+    isCloud,
+    cloudError,
+    summary,
+    expenseByCategory,
+    addTransaction,
+    deleteTransaction,
+  } = useTransactions()
 
   return (
     <div className="min-h-screen bg-background">
-      <Header />
+      <Header isCloud={isCloud} cloudError={cloudError} />
 
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-16">
         {/* Summary cards */}
@@ -84,6 +37,16 @@ export default function App() {
             <ExpenseChart data={expenseByCategory} />
           </div>
         </section>
+
+        {/* Data loading indicator */}
+        {loading && (
+          <div className="mt-6 text-center">
+            <div className="inline-flex items-center gap-2 bg-primary-50 text-primary-600 px-4 py-2 rounded-xl text-sm">
+              <Loader2 className="w-4 h-4 animate-spin" />
+              Carregando dados...
+            </div>
+          </div>
+        )}
 
         {/* Transaction history */}
         <section className="mt-10">
