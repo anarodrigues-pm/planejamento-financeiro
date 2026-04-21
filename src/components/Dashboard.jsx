@@ -106,7 +106,7 @@ export default function Dashboard({ fin }) {
                         {t.type === 'income' ? '+' : '-'}{fmt(t.amount)}
                       </span>
                       <button onClick={() => deleteTransaction(t.id)}
-                        className="opacity-0 group-hover:opacity-100 text-text-muted hover:text-expense transition-all p-1 rounded-lg hover:bg-expense-light">
+                        className="p-1 rounded-lg text-text-muted hover:text-expense transition-all p-1 rounded-lg hover:bg-expense-light">
                         <Trash2 className="w-3.5 h-3.5" />
                       </button>
                     </div>
@@ -134,7 +134,7 @@ export default function Dashboard({ fin }) {
                   <div className="flex items-center gap-2">
                     <span className="text-income font-semibold text-sm">{fmt(i.amount)}</span>
                     <button onClick={() => deleteIncome(i.id)}
-                      className="opacity-0 group-hover:opacity-100 text-text-muted hover:text-expense transition-all p-1 rounded-lg hover:bg-expense-light">
+                      className="p-1 rounded-lg text-text-muted hover:text-expense transition-all p-1 rounded-lg hover:bg-expense-light">
                       <Trash2 className="w-3.5 h-3.5" />
                     </button>
                   </div>

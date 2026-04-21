@@ -182,7 +182,7 @@ export default function Cartoes({ fin }) {
                             <td className="px-4 py-3 text-right font-bold text-text">{fmt(t.amount)}</td>
                             <td className="px-4 py-3">
                               <button onClick={() => deleteTransaction(t.id)}
-                                className="opacity-0 group-hover:opacity-100 p-1.5 rounded-lg text-text-muted hover:text-expense hover:bg-expense-light transition-all">
+                                className="p-1 rounded-lg p-1.5 rounded-lg text-text-muted hover:text-expense hover:bg-expense-light transition-all">
                                 <Trash2 className="w-4 h-4" />
                               </button>
                             </td>

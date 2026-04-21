@@ -83,7 +83,7 @@ export default function Categorias({ fin }) {
               <div className="flex items-center gap-2">
                 <span className="w-3 h-3 rounded-full" style={{ background: c.color }} />
                 <button onClick={() => { if(confirm(`Remover "${c.name}"?`)) deleteCategory(c.id) }}
-                  className="opacity-0 group-hover:opacity-100 p-1.5 rounded-lg text-text-muted hover:text-expense hover:bg-expense-light transition-all">
+                  className="p-1 rounded-lg p-1.5 rounded-lg text-text-muted hover:text-expense hover:bg-expense-light transition-all">
                   <Trash2 className="w-3.5 h-3.5" />
                 </button>
               </div>
