@@ -45,7 +45,8 @@ function IncomeForm({ onAdd }) {
 }
 
 export default function Dashboard({ fin }) {
-  const { monthExpenses, monthIncomes, categoryBreakdown, monthTransactions, getCat, cards, deleteIncome, addIncome, deleteTransaction } = fin
+  const { monthExpenses, monthIncomes, monthIncomeTransactions, categoryBreakdown, monthTransactions, getCat, cards, deleteIncome, addIncome, deleteTransaction } = fin
+  const allIncomes = [...(monthIncomes || []), ...(monthIncomeTransactions || [])]
   const totalExp = monthExpenses.reduce((s, t) => s + t.amount, 0)
 
   const catEntries = Object.entries(categoryBreakdown)
@@ -122,10 +123,10 @@ export default function Dashboard({ fin }) {
           <h2 className="text-base font-semibold text-text">Receitas do Mês</h2>
           <IncomeForm onAdd={addIncome} />
         </div>
-        {monthIncomes.length === 0
+        {allIncomes.length === 0
           ? <Empty icon="💰" text="Nenhuma receita registrada" />
           : <div className="space-y-0.5">
-              {monthIncomes.map(i => (
+              {allIncomes.map(i => (
                 <div key={i.id} className="flex items-center justify-between py-2.5 border-b border-border last:border-0 group">
                   <div>
                     <p className="text-sm font-medium text-text">{i.description}</p>
@@ -133,7 +134,7 @@ export default function Dashboard({ fin }) {
                   </div>
                   <div className="flex items-center gap-2">
                     <span className="text-income font-semibold text-sm">{fmt(i.amount)}</span>
-                    <button onClick={() => deleteIncome(i.id)}
+                    <button onClick={() => i.type === 'income' ? deleteTransaction(i.id) : deleteIncome(i.id)}
                       className="p-1 rounded-lg text-text-muted hover:text-expense transition-all p-1 rounded-lg hover:bg-expense-light">
                       <Trash2 className="w-3.5 h-3.5" />
                     </button>

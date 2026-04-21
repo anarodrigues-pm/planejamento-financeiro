@@ -110,13 +110,20 @@ export function useFinancas() {
     return [...regular, ...recurrent]
   }, [incomes, currentMonth])
 
+  // Income-type transactions (added via main modal)
+  const monthIncomeTransactions = useMemo(() =>
+    monthTransactions.filter(t => t.type === 'income')
+  , [monthTransactions])
+
   // Summary
   const summary = useMemo(() => {
-    const totalIncome = monthIncomes.reduce((s, i) => s + (i.amount || 0), 0)
+    const incomesTotal = monthIncomes.reduce((s, i) => s + (i.amount || 0), 0)
+    const incomeTransactionsTotal = monthTransactions.filter(t => t.type === 'income').reduce((s, t) => s + (t.amount || 0), 0)
+    const totalIncome = incomesTotal + incomeTransactionsTotal
     const totalExpense = monthExpenses.reduce((s, t) => s + (t.amount || 0), 0)
     const cardExpense = monthExpenses.filter(t => t.payment === 'credito').reduce((s, t) => s + (t.amount || 0), 0)
     return { totalIncome, totalExpense, balance: totalIncome - totalExpense, cardExpense }
-  }, [monthIncomes, monthExpenses])
+  }, [monthIncomes, monthTransactions, monthExpenses])
 
   // Category breakdown
   const categoryBreakdown = useMemo(() => {
@@ -230,7 +237,7 @@ export function useFinancas() {
 
   return {
     currentMonth, monthLabel, changeMonth,
-    transactions, monthTransactions, monthExpenses, monthIncomes,
+    transactions, monthTransactions, monthExpenses, monthIncomes, monthIncomeTransactions,
     cards, goals, categories, incomes,
     summary, categoryBreakdown,
     getCat, getCard, isCloud, loading,
