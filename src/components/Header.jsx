@@ -1,48 +1,24 @@
-import { Wallet, Cloud, HardDrive, Wifi, WifiOff } from 'lucide-react'
-
-export default function Header({ isCloud, cloudError }) {
+export default function Header({ monthLabel, isCloud, onPrev, onNext, onAddTransaction }) {
   return (
-    <header className="bg-surface border-b border-border sticky top-0 z-50 backdrop-blur-md bg-white/80">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-16">
-          <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-primary-500 to-primary-700 flex items-center justify-center shadow-md">
-              <Wallet className="w-5 h-5 text-white" />
-            </div>
-            <div>
-              <h1 className="text-lg font-bold text-text tracking-tight">
-                FinPlan
-              </h1>
-              <p className="text-xs text-text-muted -mt-0.5">
-                Planejamento Financeiro
-              </p>
-            </div>
-          </div>
+    <header className="bg-text text-surface sticky top-0 z-50 h-16 flex items-center justify-between px-4">
+      <div className="font-serif text-xl font-bold tracking-tight">
+        fin<span className="text-income-light">ctrl</span>
+      </div>
 
-          {/* Connection status */}
-          <div className="flex items-center gap-2">
-            {isCloud ? (
-              <div className="flex items-center gap-2 text-sm bg-income-light text-income-dark px-3 py-1.5 rounded-xl border border-income/20">
-                <Cloud className="w-3.5 h-3.5" />
-                <Wifi className="w-3 h-3" />
-                <span className="text-xs font-medium hidden sm:inline">
-                  Sincronizado na nuvem
-                </span>
-              </div>
-            ) : (
-              <div
-                className="flex items-center gap-2 text-sm bg-surface-alt text-text-secondary px-3 py-1.5 rounded-xl border border-border cursor-help"
-                title={cloudError || 'Usando armazenamento local'}
-              >
-                <HardDrive className="w-3.5 h-3.5" />
-                <WifiOff className="w-3 h-3 opacity-50" />
-                <span className="text-xs font-medium hidden sm:inline">
-                  Dados salvos localmente
-                </span>
-              </div>
-            )}
-          </div>
-        </div>
+      <div className="flex items-center gap-3">
+        <button onClick={onPrev} className="w-8 h-8 rounded-lg bg-white/10 hover:bg-white/20 flex items-center justify-center transition-colors text-lg">‹</button>
+        <span className="text-sm font-medium min-w-36 text-center">{monthLabel}</span>
+        <button onClick={onNext} className="w-8 h-8 rounded-lg bg-white/10 hover:bg-white/20 flex items-center justify-center transition-colors text-lg">›</button>
+      </div>
+
+      <div className="flex items-center gap-2">
+        {isCloud && <span className="text-xs text-white/50 hidden sm:block">☁ sincronizado</span>}
+        <button
+          onClick={onAddTransaction}
+          className="bg-income-light hover:bg-income text-white text-sm font-semibold px-4 py-2 rounded-lg transition-colors"
+        >
+          + Lançamento
+        </button>
       </div>
     </header>
   )
